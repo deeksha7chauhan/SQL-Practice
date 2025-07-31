@@ -104,6 +104,30 @@ SELECT p.maker, p.type
 FROM Product p
 JOIN OneTypeMakers o ON p.maker = o.maker
 GROUP BY p.maker, p.type;
+
+
+SELECT s.name
+FROM Ships s
+JOIN Classes c ON s.class = c.class
+WHERE c.bore = 16
+
+UNION
+
+
+SELECT o.ship
+FROM Outcomes o
+LEFT JOIN Ships s ON o.ship = s.name
+JOIN Classes c ON o.ship = c.class
+WHERE c.bore = 16;
+
+SELECT DISTINCT o.battle
+FROM Outcomes o
+WHERE o.ship IN (
+    SELECT name
+    FROM Ships
+    WHERE class = 'Kongo'
+);
+
   ________________________________________________________________
   ________________________________________________________________
   ________________________________________________________________
