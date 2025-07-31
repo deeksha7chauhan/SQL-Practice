@@ -76,15 +76,34 @@ HAVING COUNT(DISTINCT name) = 1;
   Select country from Classes where type='bb' 
 union 
 Select country from Classes where type='bb' 
-//This will just return a distinct list of countries that have battleships (type = 'bb') — but it's redundant.//
+//This will just return a distinct list of countries that have battleships (type = 'bb') but it's redundant
 
-  COREECT:- 
+  COREECT 
   Select country from Classes where type='bb' 
 Intersect
 Select country from Classes where type='bc' 
 OR
 SELECT country FROM Classes WHERE type IN ('bb', 'bc') GROUP BY country HAVING COUNT(DISTINCT type) = 2;
   ________________________________________________________________
+    ### 40.
+
+SELECT maker, MIN(type) AS type
+FROM Product
+GROUP BY maker
+HAVING COUNT(DISTINCT type) = 1 AND COUNT(DISTINCT model) > 1;
+
+WITH OneTypeMakers AS (
+    SELECT maker
+    FROM Product
+    GROUP BY maker
+    HAVING COUNT(DISTINCT type) = 1 AND COUNT(model) > 1
+)
+
+
+SELECT p.maker, p.type
+FROM Product p
+JOIN OneTypeMakers o ON p.maker = o.maker
+GROUP BY p.maker, p.type;
   ________________________________________________________________
   ________________________________________________________________
   ________________________________________________________________
