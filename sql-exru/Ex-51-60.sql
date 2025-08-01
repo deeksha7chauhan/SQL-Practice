@@ -47,6 +47,34 @@ SELECT c.class, COALESCE( MIN(CASE WHEN s.name = c.class THEN s.launched END), M
   ________________________________________________________________
 ### 56. For each class, find out the number of ships of this class that were sunk in battles.
 Result set: class, number of ships sunk.
+SELECT class, SUM(sunks) AS sunks 
+FROM (
+	SELECT class, 
+	       SUM(CASE result WHEN 'sunk' THEN 1 ELSE 0 END) AS sunks 
+	FROM Classes c 
+	LEFT JOIN Outcomes o ON c.class = o.ship
+	WHERE class NOT IN (SELECT name FROM Ships) 
+	GROUP BY class
+
+	UNION ALL
+
+	SELECT class, 
+	       SUM(CASE result WHEN 'sunk' THEN 1 ELSE 0 END) AS sunks 
+	FROM Ships s 
+	LEFT JOIN Outcomes o ON s.name = o.ship
+	GROUP BY class
+) AS x
+GROUP BY class;
+
+Split the Problem into Two Parts
+ - Part A: Count sunk ships where class name is used directly in Outcomes.ship
+ - Part B: Count sunk ships using Ships.name → Outcomes.ship mapping
+Build Two Subqueries
+ - Join Classes with Outcomes for class-name ships (exclude those in Ships)
+ - Join Ships with Outcomes for normal ships
+Use CASE WHEN result = 'sunk' to count only sunk ships.
+Combine Both with UNION ALL
+Group by class and SUM the sunk counts
 
   ________________________________________________________________
  ________________________________________________________________
