@@ -82,6 +82,7 @@ SELECT class FROM classes WHERE class IN (
 SELECT s.name FROM Ships s JOIN Classes c ON s.class = c.class
 WHERE c.bore = 16
 UNION
+-- Part 2: Get ship names from Outcomes table, including those not in Ships
 SELECT o.ship FROM Outcomes o LEFT JOIN Ships s ON o.ship = s.name
 JOIN Classes c ON o.ship = c.class WHERE c.bore = 16;
   ________________________________________________________________
