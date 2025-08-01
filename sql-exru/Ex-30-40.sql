@@ -85,7 +85,7 @@ Select country from Classes where type='bc'
 OR
 SELECT country FROM Classes WHERE type IN ('bb', 'bc') GROUP BY country HAVING COUNT(DISTINCT type) = 2;
   ________________________________________________________________
-    ### 40.
+    ### 40. Get the makers who produce only one product type and more than one model. Output: maker, type.
 
 SELECT maker, MIN(type) AS type
 FROM Product
@@ -104,30 +104,6 @@ SELECT p.maker, p.type
 FROM Product p
 JOIN OneTypeMakers o ON p.maker = o.maker
 GROUP BY p.maker, p.type;
-
-
-SELECT s.name
-FROM Ships s
-JOIN Classes c ON s.class = c.class
-WHERE c.bore = 16
-
-UNION
-
-
-SELECT o.ship
-FROM Outcomes o
-LEFT JOIN Ships s ON o.ship = s.name
-JOIN Classes c ON o.ship = c.class
-WHERE c.bore = 16;
-
-SELECT DISTINCT o.battle
-FROM Outcomes o
-WHERE o.ship IN (
-    SELECT name
-    FROM Ships
-    WHERE class = 'Kongo'
-);
-
   ________________________________________________________________
   ________________________________________________________________
   ________________________________________________________________
