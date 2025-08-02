@@ -1,5 +1,8 @@
 ###51. Find the names of the ships with the largest number of guns among all ships having the same displacement (including ships in the Outcomes table).
-
+WITH all_ships AS (SELECT name AS ship, class FROM Ships
+  UNION SELECT o.ship, c.class FROM Outcomes o JOIN Classes c ON o.ship = c.class ), ship_specs AS (SELECT a.ship, cl.numGuns, cl.displacement FROM all_ships a JOIN Classes cl ON a.class = cl.class),
+max_guns AS (SELECT displacement, MAX(numGuns) AS max_guns FROM ship_specs GROUP BY displacement)
+SELECT s.ship FROM ship_specs s JOIN max_guns m ON s.displacement = m.displacement AND s.numGuns = m.max_guns;
  ________________________________________________________________
 ### 52. Determine the names of all ships in the Ships table that can be a Japanese battleship having at least nine main guns with a caliber
  of less than 19 inches and a displacement of not more than 65 000 tons.
